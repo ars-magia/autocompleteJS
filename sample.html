@@ -1,0 +1,115 @@
+<html>
+	<head>
+		<script type="text/javascript" src="uscript-1.1.0.js"></script>
+		<style>
+			.how-to-DOM{
+				background-color: #000;
+				color: #999;
+				padding: 5px 10px;
+				font-weight: bold;
+			}
+	
+			.how-to-DOM>p{
+				margin: 0px;
+			}
+			
+			.how-to-sample{
+				padding: 8px;
+			}
+			
+			.tag{color: red;}
+			.attribute{color: blue;}
+			.value{color: green;}
+		</style>
+		<script>
+			window.addEventListener("load",function(){
+				var p = document.getElementsByTagName("p");
+				var f7 = [
+							["html",[],[]], ["head",[],[]], ["script",["type","src"],["text/javascript","uscript-1.1.0.js"]], ["head",[],[]], ["body",[],[]], ["input",["type","target-word"],["autocomplete","the quick brown fox"]], ["body",[],[]], ["html",[],[]]
+						];
+				var dt = [
+							["datasrc",["name"],["myData"]], ["item",[],["One"]], ["item",[],["Two"]], ["item",[],["Three"]], ["datasrc",[],[]], ["input",["type","source"],["autocomplete","myData"]]
+						];
+				
+				for(x=0; x<f7.length; x++)
+					p[x].innerHTML = evalAll(p[x].innerHTML, f7[x][0],f7[x][1],f7[x][2]);
+				
+				p[f7.length].innerHTML = evalAll(p[f7.length].innerHTML,"input",["type","target-word","case-sensitive"],["autocomplete","The Quick Brown Fox","true"]);
+				
+				for(y=9; y<dt.length+9; y++)
+					p[y].innerHTML = evalAll(p[y].innerHTML, dt[y-9][0], dt[y-9][1], dt[y-9][2]);
+					
+				
+				
+			});
+			
+			function evalAll(p,tag,attr,value){
+				return findTag(findAttributes(findValue(p,value),attr),tag);
+			}
+			
+			function findTag(a,b){
+				return a.replace(b,"<span class='tag'>"+b+"</span>").replace("/"+b,"/<span class='tag'>"+b+"</span>");
+			}
+			
+			function findAttributes(a,b){
+				for(i=0; i<b.length; i++)
+					a = a.replace(b[i], "<span class='attribute'>"+b[i]+"</span>");					
+				return a;
+			}
+			
+			function findValue(a,b){
+				for(j=0; j<b.length; j++)
+					a = a.replace(b[j], "<span class='value'>"+b[j]+"</span>");
+				return a;
+			}					
+		</script>
+	</head>
+
+	<body>
+		<h4>*type="autocomplete"</h4>
+		<div class="how-to-DOM">
+			<p>&lt;html&gt;</p>
+			<p>&nbsp;&nbsp;&lt;head&gt;</p>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;&lt;script type="text/javascript" src="uscript-1.1.0.js"&gt;&lt;/script&gt;</p>
+			<p>&nbsp;&nbsp;&lt;/head&gt;</p>
+			<p>&nbsp;&nbsp;&lt;body&gt;</p>
+			<p>&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="autocomplete" target-word="the quick brown fox" /&gt;</p>
+			<p>&nbsp;&nbsp;&lt;/body&gt;</p>
+			<p>&lt;/html&gt;</p>
+		</div>
+		<div class="how-to-sample">
+			<span>Sample: </span><input type="autocomplete" target-word="the quick brown fox" />
+		</div>
+		
+		<hr />
+		<h4>*case-sensitive="true | false"</h4>
+		<div class="how-to-DOM">
+			<p>&lt;input type="autocomplete" target-word="The Quick Brown Fox" case-sensitive="true" /&gt;</p>
+		</div>
+		<div class="how-to-sample">
+			<span>Sample: </span><input type="autocomplete" target-word="The Quick Brown Fox" case-sensitive="true" />
+		</div>
+		
+		<hr />
+		<h4>*datasrc tag</h4>
+		<div class="how-to-DOM">
+			<p>&lt;datasrc name="myData"&gt;</p>
+				<p>&nbsp;&nbsp;&lt;item&gt;One&lt;/item&gt;</p>
+				<p>&nbsp;&nbsp;&lt;item&gt;Two&lt;/item&gt;</p>
+				<p>&nbsp;&nbsp;&lt;item&gt;Three&lt;/item&gt;</p>
+			<p>&lt;/datasrc&gt;</p>
+			<p>&lt;input type="autocomplete" source="myData" /&gt;</p>
+		</div>
+		<div class="how-to-sample">
+			<span>Sample: </span>
+			<datasrc name="myData">
+				<item>One</item>
+				<item>Two</item>
+				<item>Three</item>
+			</datasrc>
+			<input type="autocomplete" source="myData" />
+		</div>
+
+	</body>
+</html>
+
